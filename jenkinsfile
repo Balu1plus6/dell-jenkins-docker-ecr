@@ -28,13 +28,12 @@ pipeline {
                 script {
                     // Run your provided commands in a shell script
                     sh """
-                        TagVaule=\$(aws ecr describe-images --repository-name jenkinstesting --query 'imageDetails[*].imageTags' --output text | tr '\\t' '\\n' | sort -Vr | head -n 1)
+                        TagVaule=\$(aws ecr describe-images --repository-name dell --query 'imageDetails[*].imageTags' --output text | tr '\\t' '\\n' | sort -Vr | head -n 1)
                         echo \$TagVaule
                         TagUpdated=\$(echo \$TagVaule | awk -F . '{print \$2 + 1}')
                         Initial_Tag_vaule=\$(echo \$TagVaule | awk -F . '{print \$1}')
                         LAST_TAG="\$Initial_Tag_vaule.\$TagUpdated"
                         echo "LAST_TAG: \$LAST_TAG"
-                       
                     """
                 }
             }
