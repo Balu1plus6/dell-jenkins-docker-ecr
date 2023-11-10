@@ -28,7 +28,8 @@ pipeline {
                 script {
                     // Run your provided commands in a shell script
                     sh """
-                        TagVaule=\$(aws ecr describe-images --repository-name dell --query 'imageDetails[*].imageTags' --output text | tr '\\t' '\\n' | sort -Vr | head -n 1)
+                        #TagVaule=\$(aws ecr describe-images --repository-name ${IMAGE_REPO_NAME} --query 'imageDetails[*].imageTags' --output text | tr '\\t' '\\n' | sort -Vr | head -n 1)
+                        TagVaule=1.9
                         echo \$TagVaule
                         TagUpdated=\$(echo \$TagVaule | awk -F . '{print \$2 + 1}')
                         Initial_Tag_vaule=\$(echo \$TagVaule | awk -F . '{print \$1}')
@@ -38,11 +39,12 @@ pipeline {
                 }
             }
         }
+    
         // Building Docker images
     stage('Building image') {
       steps{
         script {
-          dockerImage = docker.build "${IMAGE_REPO_NAME}:${LAST_TAG}"
+            dockerImage = docker.build "${IMAGE_REPO_NAME}:${LAST_TAG}"
         }
       }
     }
